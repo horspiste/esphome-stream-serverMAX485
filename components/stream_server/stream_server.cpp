@@ -79,25 +79,29 @@ void StreamServerComponent::read() {
 
 void StreamServerComponent::write() {
 #if ESPHOME_VERSION_CODE >= VERSION_CODE(2021, 10, 0)
-    if (this->flow_control_pin_ != nullptr)
+    if (this->flow_control_pin_ != nullptr) {
         this->flow_control_pin_->digital_write(true);
+        ESP_LOGD(TAG, "*flow control high");
+    }
     this->stream_->write_array(this->recv_buf_);
-    if (this->flow_control_pin_ != nullptr)
-        this->flow_control_pin_->digital_write(false);
     this->recv_buf_.clear();
+    if (this->flow_control_pin_ != nullptr) {
+        this->flow_control_pin_->digital_write(false);
+        ESP_LOGD(TAG, "*flow control low");
+    }
 #else
     size_t len;
+    if (this->flow_control_pin_ != nullptr) {
+        this->flow_control_pin_->digital_write(true);
+        ESP_LOGD(TAG, "!flow control high");
+    }
     while ((len = this->recv_buf_.size()) > 0) {
-        if (this->flow_control_pin_ != nullptr) {
-            this->flow_control_pin_->digital_write(true);
-            ESP_LOGD(TAG, "flow control high");
-        }
         this->stream_->write(this->recv_buf_.data(), len);
         this->recv_buf_.erase(this->recv_buf_.begin(), this->recv_buf_.begin() + len);
-        if (this->flow_control_pin_ != nullptr) {
-            this->flow_control_pin_->digital_write(false);
-            ESP_LOGD(TAG, "flow control low");
-        }
+    }
+    if (this->flow_control_pin_ != nullptr) {
+        this->flow_control_pin_->digital_write(false);
+        ESP_LOGD(TAG, "!flow control low");
     }
 #endif
 }
