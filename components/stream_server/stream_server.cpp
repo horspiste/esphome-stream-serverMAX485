@@ -111,7 +111,7 @@ void StreamServerComponent::dump_config() {
                   network_get_address().c_str(),
 #endif
                   this->port_);
-    ESP_LOGCONFIG(TAG,"  Flow Control Pin: %u", this->flow_control_pin_);                  
+    LOG_PIN("  Flow Control Pin: ", this->flow_control_pin_);                  
 }
 
 void StreamServerComponent::on_shutdown() {
