@@ -19,6 +19,8 @@
 #include "esphome/core/log.h"
 #include "esphome/core/util.h"
 #include "esphome/core/helpers.h"
+#include <gpio.h>
+
 
 #if ESPHOME_VERSION_CODE >= VERSION_CODE(2021, 10, 0)
 #include "esphome/components/network/util.h"
