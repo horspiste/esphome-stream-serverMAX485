@@ -48,7 +48,7 @@ def to_code(config):
         cg.add(var.set_port(config[CONF_PORT]))
 
     if CONF_FLOW_CONTROL_PIN in config: 
-        pin = yield config[CONF_FLOW_CONTROL_PIN])
+        pin = yield cg.gpio_pin_expression(config[CONF_FLOW_CONTROL_PIN])
         cg.add(var.set_flow_control_pin(pin))
     
 
