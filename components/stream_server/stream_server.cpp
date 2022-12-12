@@ -88,12 +88,16 @@ void StreamServerComponent::write() {
 #else
     size_t len;
     while ((len = this->recv_buf_.size()) > 0) {
-        if (this->flow_control_pin_ != nullptr)
+        if (this->flow_control_pin_ != nullptr) {
             this->flow_control_pin_->digital_write(true);
+            ESP_LOGD(TAG, "flow control high");
+        }
         this->stream_->write(this->recv_buf_.data(), len);
-        if (this->flow_control_pin_ != nullptr)
-            this->flow_control_pin_->digital_write(false);
         this->recv_buf_.erase(this->recv_buf_.begin(), this->recv_buf_.begin() + len);
+        if (this->flow_control_pin_ != nullptr) {
+            this->flow_control_pin_->digital_write(false);
+            ESP_LOGD(TAG, "flow control low");
+        }
     }
 #endif
 }
@@ -107,7 +111,7 @@ void StreamServerComponent::dump_config() {
                   network_get_address().c_str(),
 #endif
                   this->port_);
-    LOG_PIN("  Flow Control Pin: ", this->flow_control_pin_);                  
+    ESP_LOGCONFIG(TAG,"  Flow Control Pin: %u", this->flow_control_pin_);                  
 }
 
 void StreamServerComponent::on_shutdown() {
