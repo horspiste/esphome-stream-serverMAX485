@@ -77,7 +77,7 @@ protected:
     SSStream *stream_{nullptr};
     AsyncServer server_{0};
     uint16_t port_{6638};
-    GPIOPin *flow_control_pin_{nullptr};
+    esphome::GPIOPin *flow_control_pin_{nullptr};
     std::vector<uint8_t> recv_buf_{};
     std::vector<std::unique_ptr<Client>> clients_{};
 };
