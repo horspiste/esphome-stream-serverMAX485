@@ -18,6 +18,7 @@ import esphome.config_validation as cv
 from esphome.cpp_helpers import gpio_pin_expression
 from esphome.components import uart
 from esphome.const import CONF_ID, CONF_PORT, CONF_FLOW_CONTROL_PIN
+from esphome import pins
 
 # ESPHome doesn't know the Stream abstraction yet, so hardcode to use a UART for now.
 
@@ -46,9 +47,10 @@ def to_code(config):
 	if CONF_PORT in config:
 		cg.add(var.set_port(config[CONF_PORT]))
 
-	if CONF_FLOW_CONTROL_PIN in config:
-        pin = gpio_pin_expression(config[CONF_FLOW_CONTROL_PIN])
-        cg.add(var.set_flow_control_pin(pin))
+	if CONF_FLOW_CONTROL_PIN in config: 
+		pin = gpio_pin_expression(config[CONF_FLOW_CONTROL_PIN])
+		cg.add(var.set_flow_control_pin(pin))
+	
 
 	yield cg.register_component(var, config)
 	yield uart.register_uart_device(var, config)
