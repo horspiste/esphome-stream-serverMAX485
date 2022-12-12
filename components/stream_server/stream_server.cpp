@@ -85,6 +85,7 @@ void StreamServerComponent::write() {
             ESP_LOGD(TAG, "*flow control high");
         }
         this->stream_->write_array(this->recv_buf_);
+        this->flush();
         this->recv_buf_.clear();
         if (this->flow_control_pin_ != nullptr) {
             this->flow_control_pin_->digital_write(false);
