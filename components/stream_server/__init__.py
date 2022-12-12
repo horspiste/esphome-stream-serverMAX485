@@ -31,26 +31,26 @@ MULTI_CONF = True
 StreamServerComponent = cg.global_ns.class_("StreamServerComponent", cg.Component)
 
 CONFIG_SCHEMA = (
-	cv.Schema(
-		{
-			cv.GenerateID(): cv.declare_id(StreamServerComponent),
-			cv.Optional(CONF_PORT): cv.port,
-			cv.Optional(CONF_FLOW_CONTROL_PIN): pins.gpio_output_pin_schema
-		}
-	)
-		.extend(cv.COMPONENT_SCHEMA)
-		.extend(uart.UART_DEVICE_SCHEMA)
+    cv.Schema(
+        {
+            cv.GenerateID(): cv.declare_id(StreamServerComponent),
+            cv.Optional(CONF_PORT): cv.port,
+            cv.Optional(CONF_FLOW_CONTROL_PIN): pins.gpio_output_pin_schema
+        }
+    )
+        .extend(cv.COMPONENT_SCHEMA)
+        .extend(uart.UART_DEVICE_SCHEMA)
 )
 
 def to_code(config):
-	var = cg.new_Pvariable(config[CONF_ID])
-	if CONF_PORT in config:
-		cg.add(var.set_port(config[CONF_PORT]))
+    var = cg.new_Pvariable(config[CONF_ID])
+    if CONF_PORT in config:
+        cg.add(var.set_port(config[CONF_PORT]))
 
-	if CONF_FLOW_CONTROL_PIN in config: 
-		pin = gpio_pin_expression(config[CONF_FLOW_CONTROL_PIN])
-		cg.add(var.set_flow_control_pin(pin))
-	
+    if CONF_FLOW_CONTROL_PIN in config: 
+        pin = gpio_pin_expression(config[CONF_FLOW_CONTROL_PIN])
+        cg.add(var.set_flow_control_pin(pin))
+    
 
-	yield cg.register_component(var, config)
-	yield uart.register_uart_device(var, config)
+    yield cg.register_component(var, config)
+    yield uart.register_uart_device(var, config)
