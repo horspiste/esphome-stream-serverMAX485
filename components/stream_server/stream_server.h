@@ -58,6 +58,7 @@ public:
     float get_setup_priority() const override { return esphome::setup_priority::AFTER_WIFI; }
 
     void set_port(uint16_t port) { this->port_ = port; }
+    void set_flow_control_pin(GPIOPin *flow_control_pin) { this->flow_control_pin_ = flow_control_pin; }
 
 protected:
     void cleanup();
@@ -76,6 +77,7 @@ protected:
     SSStream *stream_{nullptr};
     AsyncServer server_{0};
     uint16_t port_{6638};
+    GPIOPin *flow_control_pin_{nullptr};
     std::vector<uint8_t> recv_buf_{};
     std::vector<std::unique_ptr<Client>> clients_{};
 };
